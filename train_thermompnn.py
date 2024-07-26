@@ -34,7 +34,6 @@ class TransferModelPL(pl.LightningModule):
         self.learn_rate = cfg.training.learn_rate
         self.mpnn_learn_rate = cfg.training.mpnn_learn_rate if 'mpnn_learn_rate' in cfg.training else None
         self.lr_schedule = cfg.training.lr_schedule if 'lr_schedule' in cfg.training else False
-
         # set up metrics dictionary
         self.metrics = nn.ModuleDict()
         for split in ("train_metrics", "val_metrics"):
