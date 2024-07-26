@@ -26,31 +26,27 @@ def get_thermo_mpnn(cfg):
 
     return model
 
-# def get_protein_mpnn(cfg, version='v_48_020.pt'):
-#     """Loading Pre-trained ProteinMPNN model for structure embeddings"""
-#     hidden_dim = 128
-#     num_layers = 3 
+def get_protein_mpnn(cfg, version='v_48_020.pt'):
+    """Loading Pre-trained ProteinMPNN model for structure embeddings"""
+    hidden_dim = 128
+    num_layers = 3 
 
-#     #model_weight_dir = os.path.join(cfg.platform.thermompnn_dir, 'vanilla_model_weights')
-#     #checkpoint_path = os.path.join(model_weight_dir, version)
-#     #checkpoint_path = "vanilla_model_weights/v_48_020.pt"
+    model_weight_dir = os.path.join(cfg.platform.thermompnn_dir, 'vanilla_model_weights')
+    checkpoint_path = os.path.join(model_weight_dir, version)
+    # checkpoint_path = "vanilla_model_weights/v_48_020.pt"
+    checkpoint = torch.load(checkpoint_path, map_location='cpu') 
+    model = ProteinMPNN(ca_only=False, num_letters=21, node_features=hidden_dim, edge_features=hidden_dim, hidden_dim=hidden_dim, 
+                        num_encoder_layers=num_layers, num_decoder_layers=num_layers, k_neighbors=checkpoint['num_edges'], augment_eps=0.0)
+    if cfg.model.load_pretrained:
+        model.load_state_dict(checkpoint['model_state_dict'])
     
-#     checkpoint = torch.load(checkpoint_path, map_location='cpu') 
-#     checkpoint ['num_edges'] =48
-#     model = ProteinMPNN(ca_only=False, num_letters=21, node_features=hidden_dim, edge_features=hidden_dim, hidden_dim=hidden_dim, 
-#                          k_neighbors=checkpoint ['num_edges'],num_encoder_layers=num_layers, num_decoder_layers=num_layers , augment_eps=0.0)
-    
-#     if cfg.model.load_pretrained:
-#         model.load_state_dict(checkpoint['model_state_dict'])
-    
-#     if cfg.model.freeze_weights:
-#         model.eval()
-#         # freeze these weights for transfer learning
-#         for param in model.parameters():
-#             param.requires_grad = False
+    if cfg.model.freeze_weights:
+        model.eval()
+        # freeze these weights for transfer learning
+        for param in model.parameters():
+            param.requires_grad = False
 
-#     return model
-
+    return model
 
 
 class TransferModel(nn.Module):
