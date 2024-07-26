@@ -62,7 +62,7 @@ class TransferModel(nn.Module):
         if 'decoding_order' not in self.cfg:
             self.cfg.decoding_order = 'left-to-right'
         
-        self.prot_mpnn = get_thermo_mpnn(cfg)
+        self.prot_mpnn = get_protein_mpnn(cfg)
         EMBED_DIM = 128
         HIDDEN_DIM = 128
 
