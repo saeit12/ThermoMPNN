@@ -19,7 +19,7 @@ def get_thermo_mpnn(cfg):
     num_layers = 3 
     checkpoint_path = "/content/ThermoMPNN/models/thermoMPNN_default.pt"
     checkpoint = torch.load(checkpoint_path, map_location='cpu') 
-    model = TransferModel(cfg)
+    #model = TransferModel(cfg)
     
     if cfg.model.load_pretrained:
         model.load_state_dict(checkpoint["state_dict"])
