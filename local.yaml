@@ -4,9 +4,9 @@ platform:
   thermompnn_dir: "/content/ThermoMPNN"
 
 data_loc:
-        nivTm_csv: "/content/nivTm.csv"
-        nivTm_splits: "/content/nivTm_splits.pkl"
-        nivTm_pdbs: "/content/AF3Nivolumab.pdb"
+        nivTm_csv: "nivTm.csv"
+        nivTm_splits: "nivTm_splits.pkl"
+        nivTm_pdbs: "AF3Nivolumab.pdb"
 
 
         megascale_csv: "/nas/longleaf/home/dieckhau/protein-stability/enzyme-stability/data/mega_scale/Processed_K50_dG_datasets/Tsuboyama2023_Dataset2_Dataset3_20230416.csv"
