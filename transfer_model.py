@@ -14,27 +14,43 @@ MLP = True
 SUBTRACT_MUT = True
 
 
-def get_protein_mpnn(cfg, version='v_48_020.pt'):
-    """Loading Pre-trained ProteinMPNN model for structure embeddings"""
+def get_thermo_mpnn(cfg):
     hidden_dim = 128
     num_layers = 3 
-
-    model_weight_dir = os.path.join(cfg.platform.thermompnn_dir, 'vanilla_model_weights')
-    checkpoint_path = os.path.join(model_weight_dir, version)
-    # checkpoint_path = "vanilla_model_weights/v_48_020.pt"
+    checkpoint_path = "/content/ThermoMPNN/models/thermoMPNN_default.pt"
     checkpoint = torch.load(checkpoint_path, map_location='cpu') 
-    model = ProteinMPNN(ca_only=False, num_letters=21, node_features=hidden_dim, edge_features=hidden_dim, hidden_dim=hidden_dim, 
-                        num_encoder_layers=num_layers, num_decoder_layers=num_layers, k_neighbors=checkpoint['num_edges'], augment_eps=0.0)
-    if cfg.model.load_pretrained:
-        model.load_state_dict(checkpoint['model_state_dict'])
+    model = TransferModel()
     
-    if cfg.model.freeze_weights:
-        model.eval()
-        # freeze these weights for transfer learning
-        for param in model.parameters():
-            param.requires_grad = False
+    if cfg.model.load_pretrained:
+        model.load_state_dict(checkpoint["state_dict"])
 
     return model
+
+# def get_protein_mpnn(cfg, version='v_48_020.pt'):
+#     """Loading Pre-trained ProteinMPNN model for structure embeddings"""
+#     hidden_dim = 128
+#     num_layers = 3 
+
+#     #model_weight_dir = os.path.join(cfg.platform.thermompnn_dir, 'vanilla_model_weights')
+#     #checkpoint_path = os.path.join(model_weight_dir, version)
+#     #checkpoint_path = "vanilla_model_weights/v_48_020.pt"
+    
+#     checkpoint = torch.load(checkpoint_path, map_location='cpu') 
+#     checkpoint ['num_edges'] =48
+#     model = ProteinMPNN(ca_only=False, num_letters=21, node_features=hidden_dim, edge_features=hidden_dim, hidden_dim=hidden_dim, 
+#                          k_neighbors=checkpoint ['num_edges'],num_encoder_layers=num_layers, num_decoder_layers=num_layers , augment_eps=0.0)
+    
+#     if cfg.model.load_pretrained:
+#         model.load_state_dict(checkpoint['model_state_dict'])
+    
+#     if cfg.model.freeze_weights:
+#         model.eval()
+#         # freeze these weights for transfer learning
+#         for param in model.parameters():
+#             param.requires_grad = False
+
+#     return model
+
 
 
 class TransferModel(nn.Module):
@@ -50,7 +66,7 @@ class TransferModel(nn.Module):
         if 'decoding_order' not in self.cfg:
             self.cfg.decoding_order = 'left-to-right'
         
-        self.prot_mpnn = get_protein_mpnn(cfg)
+        self.prot_mpnn = get_thermo_mpnn(cfg)
         EMBED_DIM = 128
         HIDDEN_DIM = 128
 
