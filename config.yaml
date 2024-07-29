@@ -1,4 +1,4 @@
-project: enzyme-stability
+project: nivTm
 name: example_training
 
 datasets: [nivTm]
@@ -15,6 +15,6 @@ model:
   hidden_dims: [64, 32]
   subtract_mut: true
   num_final_layers: 2
-  freeze_weights: false
+  freeze_weights: true
   load_pretrained: true
   lightattn: true
