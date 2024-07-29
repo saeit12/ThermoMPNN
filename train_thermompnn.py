@@ -199,3 +199,4 @@ if __name__ == "__main__":
     cfg = OmegaConf.merge(cfg, OmegaConf.load("local.yaml"))
     cfg = OmegaConf.merge(cfg, OmegaConf.from_cli())
     train(cfg)
+
